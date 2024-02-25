@@ -46,7 +46,7 @@ public class EmployeeController {
     }
 
     // 従業員詳細画面
-    @GetMapping(value = "/{code}/")
+    @GetMapping(value = "/{code}")
     public String detail(@PathVariable String code, Model model) {
 
         model.addAttribute("employee", employeeService.findByCode(code));

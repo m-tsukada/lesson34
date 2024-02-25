@@ -82,6 +82,23 @@ public class EmployeeService {
         return employee;
     }
 
+    // 更新を行う
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+        // パスワードチェック
+        ErrorKinds result = employeePasswordCheck(employee);
+        if (ErrorKinds.CHECK_OK != result) {
+            return result;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        employee.setUpdatedAt(now);
+
+        employeeRepository.save(employee);
+        return ErrorKinds.SUCCESS;
+    }
+
+
     // 従業員パスワードチェック
     private ErrorKinds employeePasswordCheck(Employee employee) {
 
