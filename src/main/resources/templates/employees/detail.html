@@ -51,9 +51,7 @@
                                         </form>
                                     </div>
                                     <div class="col-auto">
-                                        <form name="form" th:action="@{/employees/{code}/update(code=${code})}" th:method="post">
-                                            <input type="submit" value="更新" class="btn btn-success">
-                                        </form>
+                                        <a th:href="@{/employees/{code}/update(code=${employee.code})}" class="btn btn-success">更新</a>
                                     </div>
                                     <div class="col-auto">
                                         <a th:href="@{/employees}" class="btn btn-primary">戻る</a>

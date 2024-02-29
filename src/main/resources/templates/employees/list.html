@@ -30,7 +30,6 @@
                                             <td class="align-middle" th:text="${employee.code}"></td>
                                             <td class="align-middle" th:text="${employee.name}"></td>
                                             <td class="align-middle"><a th:href="@{/employees/{code}(code=${employee.code})}" class="btn btn-primary">詳細</a></td>
-                                            <td class="align-middle"><a th:href="@{/employees/{code}/update(code=${employee.code})}" class="btn btn-success">更新</a></td>
                                         </tr>
                                     </tbody>
                                 </table>

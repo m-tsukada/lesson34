@@ -45,9 +45,53 @@ public class EmployeeService {
         employee.setDeleteFlg(false);
 
         LocalDateTime now = LocalDateTime.now();
-        employee.setCreatedAt(now);
         employee.setUpdatedAt(now);
+        employee.setCreatedAt(findByCode(employee.getCode()).getCreatedAt());
 
+        employeeRepository.save(employee);
+        return ErrorKinds.SUCCESS;
+    }
+
+    // 従業員一覧表示処理
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
+
+    // 1件を検索
+    public Employee findByCode(String code) {
+        // findByIdで検索
+        Optional<Employee> option = employeeRepository.findById(code);
+        // 取得できなかった場合はnullを返す
+        Employee employee = option.orElse(null);
+        return employee;
+    }
+
+    // 従業員更新
+    @Transactional
+    public ErrorKinds update(Employee employee) {
+
+        // パスワード空白チェック
+        if ("".equals(employee.getPassword())) {
+            // パスワードが空白だった場合
+            // employeeの情報をDBから引いてきて、それで更新する処理をかく
+            Employee existEmployee = findByCode(employee.getCode()); 
+            employee.setPassword(existEmployee.getPassword());
+        } else {
+            // パスワードチェック
+            ErrorKinds result = employeePasswordCheck(employee);
+            if (ErrorKinds.CHECK_OK != result) {
+                return result;
+            }
+        }
+    
+        // 登録日付をDBから引いてくる
+        Employee existEmployee = findByCode(employee.getCode());
+        employee.setCreatedAt(findByCode(existEmployee.getCode()).getCreatedAt());
+
+        // 更新日付は現在
+        LocalDateTime now = LocalDateTime.now();
+        employee.setUpdatedAt(now);
+        
         employeeRepository.save(employee);
         return ErrorKinds.SUCCESS;
     }
@@ -68,39 +112,8 @@ public class EmployeeService {
         return ErrorKinds.SUCCESS;
     }
 
-    // 従業員一覧表示処理
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
-    }
-
-    // 1件を検索
-    public Employee findByCode(String code) {
-        // findByIdで検索
-        Optional<Employee> option = employeeRepository.findById(code);
-        // 取得できなかった場合はnullを返す
-        Employee employee = option.orElse(null);
-        return employee;
-    }
-
-    // 更新を行う
-    @Transactional
-    public ErrorKinds update(Employee employee) {
-        // パスワードチェック
-        ErrorKinds result = employeePasswordCheck(employee);
-        if (ErrorKinds.CHECK_OK != result) {
-            return result;
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        employee.setUpdatedAt(now);
-
-        employeeRepository.save(employee);
-        return ErrorKinds.SUCCESS;
-    }
-
-
     // 従業員パスワードチェック
-    private ErrorKinds employeePasswordCheck(Employee employee) {
+    public ErrorKinds employeePasswordCheck(Employee employee) {
 
         // 従業員パスワードの半角英数字チェック処理
         if (isHalfSizeCheckError(employee)) {
@@ -135,5 +148,6 @@ public class EmployeeService {
         int passwordLength = employee.getPassword().length();
         return passwordLength < 8 || 16 < passwordLength;
     }
+    
 
 }
