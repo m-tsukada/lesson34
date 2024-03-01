@@ -66,8 +66,7 @@ public class EmployeeController {
          */
         if ("".equals(employee.getPassword())) {
             // パスワードが空白だった場合、新規登録画面ではエラーメッセージを出す（更新では出さない）
-            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR),
-                    ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.BLANK_ERROR), ErrorMessage.getErrorValue(ErrorKinds.BLANK_ERROR));
             return create(employee);
         }
         // 入力チェック（名前の文字数などentityで規定したものへのエラー）
@@ -86,8 +85,7 @@ public class EmployeeController {
             }
 
         } catch (DataIntegrityViolationException e) {
-            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
-                    ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
+            model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR), ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
             return create(employee);
         }
 
