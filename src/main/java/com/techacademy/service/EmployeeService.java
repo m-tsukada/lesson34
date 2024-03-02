@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.entity.Employee;
 import com.techacademy.repository.EmployeeRepository;
+import com.techacademy.entity.Report;
+import com.techacademy.service.ReportService;
+import com.techacademy.repository.ReportRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -72,8 +75,7 @@ public class EmployeeService {
 
         // パスワード空白チェック
         if ("".equals(employee.getPassword())) {
-            // パスワードが空白だった場合
-            // employeeの情報をDBから引いてきて、それで更新する処理をかく
+            // パスワードが空白だった場合、employeeの情報をDBから引いてきて、それで更新する処理をかく
             Employee existEmployee = findByCode(employee.getCode()); 
             employee.setPassword(existEmployee.getPassword());
         } else {
@@ -100,7 +102,7 @@ public class EmployeeService {
     @Transactional
     public ErrorKinds delete(String code, UserDetail userDetail) {
 
-        // 自分を削除しようとした場合はエラーメッセージを表示
+        // ログイン中の従業員を削除しようとした場合はエラーメッセージを表示
         if (code.equals(userDetail.getEmployee().getCode())) {
             return ErrorKinds.LOGINCHECK_ERROR;
         }
@@ -117,13 +119,11 @@ public class EmployeeService {
 
         // 従業員パスワードの半角英数字チェック処理
         if (isHalfSizeCheckError(employee)) {
-
             return ErrorKinds.HALFSIZE_ERROR;
         }
 
         // 従業員パスワードの8文字～16文字チェック処理
         if (isOutOfRangePassword(employee)) {
-
             return ErrorKinds.RANGECHECK_ERROR;
         }
 
@@ -144,7 +144,7 @@ public class EmployeeService {
     // 従業員パスワードの8文字～16文字チェック処理
     public boolean isOutOfRangePassword(Employee employee) {
 
-        // 桁数チェック
+        //桁数チェック
         int passwordLength = employee.getPassword().length();
         return passwordLength < 8 || 16 < passwordLength;
     }
