@@ -88,7 +88,7 @@ class EmployeeControllerTest {
     @WithMockUser(authorities = "ADMIN")
     void testDetail() throws Exception {
         // HTTPリクエストに対するレスポンスの検証
-        MvcResult result = mockMvc.perform(get("/employees/1/")) // URLにアクセス
+        MvcResult result = mockMvc.perform(get("/employees/1")) // URLにアクセス
                 .andExpect(status().isOk()) // ステータスを確認
                 .andExpect(model().attributeExists("employee")) // Modelの内容を確認
                 .andExpect(model().hasNoErrors()) // Modelのエラー有無の確認
